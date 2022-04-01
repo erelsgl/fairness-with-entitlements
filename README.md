@@ -10,4 +10,4 @@ There are four experiments. Each experiment allocates a set of discrete goods am
 * [Weighted Maximin Share](picking-WMMS.py)
 * [Weighted Envy-Freeness](picking-WEF.py)
 * [Weighted Proportionality](picking-WPROP.py)
-* [Weighted Proportionality](picking-WPROP-numpy.py)
+<!-- * [Weighted Proportionality](picking-WPROP-numpy.py) -->
