@@ -1,4 +1,5 @@
 import random
+import prtpy
 
 """
 n = number of agents
@@ -44,10 +45,21 @@ def test(n, m, y):
     sumweights = sum(weights)
 
     for i in range(n):
+        # Compute i's MMS:
+        MMS = prtpy.partition(
+            algorithm=prtpy.partitioning.integer_programming,
+            numbins=n,
+            items=vals[i],
+            objective=prtpy.obj.MinimizeLargestSum,
+            outputtype=prtpy.out.LargestSum
+        )
+        NMMS = MMS * (n * weights[i] / sumweights)
+
+
         # try all partitions to compute i's NMMS
         part = [0]*m
         NMMS = 0.0
-        while True: # compute i's WMMS
+        while True: # compute i's NMMS
             worst_bundle_val = 1e10
             vals_i = [0]*n # i's value for different bundles
             for j in range(m):
