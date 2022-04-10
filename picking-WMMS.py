@@ -11,8 +11,8 @@ def test(n, m, y):
     vals = [[0]*m for i in range(n)]
     for i in range(n):
         for j in range(m):
-            #vals[i][j] = random.random() # uniform [0,1]
-            vals[i][j] = random.expovariate(1.0) # exponential with mean 1
+            vals[i][j] = random.random() # uniform [0,1]
+            #vals[i][j] = random.expovariate(1.0) # exponential with mean 1
             #vals[i][j] = random.lognormvariate(0.0, 1.0) # log normal with mu = 0, sigma = 1
 
     # define weights
@@ -30,6 +30,9 @@ def test(n, m, y):
             ratio_j = (numpicks[j] + y) / weights[j]
             ratio_next = (numpicks[nextagent] + y) / weights[nextagent]
             if ratio_j < ratio_next - 1e-8:
+                nextagent = j
+            # in case of equal ratio, favor agent with larger weight
+            if ratio_j < ratio_next + 1e-8 and weights[j] > weights[nextagent]:
                 nextagent = j
         # determine which item this agent should pick
         nextitem = -1
@@ -81,8 +84,8 @@ def test(n, m, y):
 #############################
 
 for i in range(3, 4): # number of agents
-    for j in range(4, 12, 2): # number of items
-        runs = 10000 # number of tries
+    for j in range(6, 12, 2): # number of items
+        runs = 20000 # number of tries
         print(str(i) + " agents, " + str(j) + " items, " + str(runs) + " tries")
         for z in range(0, 105, 5): # y times 100
             y = z / 100.0
@@ -91,5 +94,5 @@ for i in range(3, 4): # number of agents
                 if test(i, j, y):
                     count += 1
             #print("y = " + str(y) + ": " + str(count))
-            print("(" + str(y) + "," + str(count/100.0) + ")", sep='', end='')
+            print("(" + str(y) + "," + str(count*100.0 / runs) + ")", sep='', end='')
         print("")

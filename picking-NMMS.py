@@ -1,5 +1,4 @@
 import random
-import prtpy
 
 """
 n = number of agents
@@ -32,6 +31,9 @@ def test(n, m, y):
             ratio_next = (numpicks[nextagent] + y) / weights[nextagent]
             if ratio_j < ratio_next - 1e-8:
                 nextagent = j
+            # in case of equal ratio, favor agent with larger weight
+            if ratio_j < ratio_next + 1e-8 and weights[j] > weights[nextagent]:
+                nextagent = j
         # determine which item this agent should pick
         nextitem = -1
         nextvalue = -1
@@ -45,21 +47,10 @@ def test(n, m, y):
     sumweights = sum(weights)
 
     for i in range(n):
-        # Compute i's MMS:
-        MMS = prtpy.partition(
-            algorithm=prtpy.partitioning.integer_programming,
-            numbins=n,
-            items=vals[i],
-            objective=prtpy.obj.MinimizeLargestSum,
-            outputtype=prtpy.out.LargestSum
-        )
-        NMMS = MMS * (n * weights[i] / sumweights)
-
-
         # try all partitions to compute i's NMMS
         part = [0]*m
         NMMS = 0.0
-        while True: # compute i's NMMS
+        while True: # compute i's WMMS
             worst_bundle_val = 1e10
             vals_i = [0]*n # i's value for different bundles
             for j in range(m):
@@ -95,8 +86,8 @@ def test(n, m, y):
 #############################
 
 for i in range(3, 4): # number of agents
-    for j in range(4, 12, 2): # number of items
-        runs = 10000 # number of tries
+    for j in range(6, 12, 2): # number of items
+        runs = 20000 # number of tries
         print(str(i) + " agents, " + str(j) + " items, " + str(runs) + " tries")
         for z in range(0, 105, 5): # y times 100
             y = z / 100.0
@@ -105,5 +96,5 @@ for i in range(3, 4): # number of agents
                 if test(i, j, y):
                     count += 1
             #print("y = " + str(y) + ": " + str(count))
-            print("(" + str(y) + "," + str(count/100.0) + ")", sep='', end='')
+            print("(" + str(y) + "," + str(count*100.0 / runs) + ")", sep='', end='')
         print("")

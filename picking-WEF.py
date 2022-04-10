@@ -72,5 +72,5 @@ for i in range(3, 4): # number of agents
                 if test(i, j, y):
                     count += 1
             #print("y = " + str(y) + ": " + str(count))
-            print("(" + str(y) + "," + str(count/1000.0) + ")", sep='', end='')
+            print("(" + str(y) + "," + str(count*100.0 / runs) + ")", sep='', end='')
         print("")
