@@ -50,7 +50,7 @@ def test(n, m, y):
         # try all partitions to compute i's NMMS
         part = [0]*m
         NMMS = 0.0
-        while True: # compute i's WMMS
+        while True: # compute i's NMMS
             worst_bundle_val = 1e10
             vals_i = [0]*n # i's value for different bundles
             for j in range(m):
